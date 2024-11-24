@@ -9,10 +9,15 @@ export default function Layout() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: '#007AFF', 
+        tabBarStyle: {
+          height: 70,
+          paddingBottom: 10,
+          paddingTop: 10
+        },
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="beranda"
         options={{
           title: 'Beranda',
           tabBarIcon: ({ color }) => <Foundation name="home" size={24} color={color} />,
