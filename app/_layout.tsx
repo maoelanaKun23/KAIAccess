@@ -1,56 +1,40 @@
-import { Tabs } from 'expo-router';
-import { View, Text, StyleSheet } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import Foundation from '@expo/vector-icons/Foundation';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
+import 'react-native-reanimated';
 
-export default function Layout() {
+import { useColorScheme } from '@/hooks/useColorScheme';
+
+SplashScreen.preventAutoHideAsync();
+
+export default function RootLayout() {
+  const colorScheme = useColorScheme();
+  const [loaded] = useFonts({
+    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  });
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: '#007AFF', 
-        tabBarStyle: {
-          height: 70,
-          paddingBottom: 10,
-          paddingTop: 10
-        },
-      }}
-    >
-      <Tabs.Screen
-        name="beranda"
-        options={{
-          title: 'Beranda',
-          tabBarIcon: ({ color }) => <Foundation name="home" size={24} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="kereta"
-        options={{
-          title: 'Kereta',
-          tabBarIcon: ({ color }) => <Ionicons name="train-outline" size={24} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="tiket-saya"
-        options={{
-          title: 'Tiket Saya',
-          tabBarIcon: ({ color }) => <Ionicons name="ticket" size={24} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="promo"
-        options={{
-          title: 'Promo',
-          tabBarIcon: ({ color }) => <Ionicons name="pricetag" size={24} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="akun"
-        options={{
-          title: 'Akun',
-          tabBarIcon: ({ color }) => <Ionicons name="person" size={24} color={color} />,
-        }}
-      />
-    </Tabs>
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack >
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="frontScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="+not-found" />
+      </Stack>
+      <StatusBar style="auto" />
+    </ThemeProvider>
   );
 }
